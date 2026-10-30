@@ -1,0 +1,87 @@
+---
+layout: runbook
+title: '#4471 · Engineering closure and cause review'
+owner: szlapinski with Codex
+status: reviewed
+reviewed: '2026-10-31'
+signature: 'v1.eyJzdWIiOiIyODkzIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTM0MDM5NDAsImV4cCI6MTc5MzQ5MDM0MH0.rdJePCeTM9fWn4LH2DbJODjI56GjqL6KhXfgHEaMqRg'
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import IncidentFindings from '#lib/kb/IncidentFindings.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+## Current disposition
+
+The [course engineering update](https://hq.mega.dev/challenges/what-it-shows) reports source
+ticket #4471 closed on **5 October**. The shared parser is **fixed**:
+`fix(dates): parse dd/mm for eu locales`. The booking-v3 hint is **won't fix** because
+the booking-v3 form was retired. Those are different closure outcomes, not two fixes.
+
+Our [parser ticket](https://github.com/szlapinski/mega-s01e03/issues/1) is closed as completed.
+Our [hint ticket](https://github.com/szlapinski/mega-s01e03/issues/2) is closed as not planned.
+These dispositions come from the desk's update, not from a live product test.
+They preserve the historical report counts and evidence.
+
+## What the export actually shows
+
+The original incident prose called this one known parser bug. Rendered evidence separates
+two causes, using tenant locale, booking form version and channel rather than browser-locale
+intake tags. Export pages overlap, so count distinct IDs before classifying.
+
+<IncidentFindings />
+
+<CauseTable ticket={4471} />
+
+## Why these are different problems
+
+The shared parser reads month first even when the tenant's date order is day first.
+Harbour Dental's app report R-41200 describes 7 April turning into 4 July.
+Morrow Tax's app report R-41205 belongs to parser even though intake tagged it hint.
+A parser fix needs tenant-aware or unambiguous date handling across app, email and
+booking-v2 inputs.
+
+The booking-v3 form prints `MM/DD/YYYY` but reads input in the day-first tenant's order.
+Copper Studio's form report R-41230 belongs to hint even though intake tagged it parser.
+Alder Physio, Copper Studio and Pale Harbour use this form. Fixing shared parsing alone
+does not repair a misleading hint. The desk instead retired the affected form.
+
+One-day and scheduling symptoms remain flagged within the classifier's parser group.
+The engineering closure does not independently demonstrate that these particular symptoms
+were caused by parsing or that the fix resolved them.
+
+## Triage from now on
+
+[Decision 0002](/kb/decisions/0002-dedupe-by-cause) replaces the subject-only rule in
+[decision 0001](/kb/decisions/0001-dedupe-by-subject). Both accepted records remain
+unchanged as historical decisions.
+
+Read the report, resolve tenant configuration, and establish the failure path before
+merging. Equal subjects do not prove equal causes; different subjects can share a cause.
+Missing tenants, unknown causes and contradictory evidence stay separate for investigation.
+
+<DedupeExplorer />
+
+## Received time is not merge time
+
+<QueueTimeline ticket={4471} />
+
+Reports begin in April. The large July merge batch is desk processing, not the start of
+customer impact. Reports continue after the batch, so a known label and a queued fix were
+not proof that the queue was resolved. The later engineering update supplies the closure
+outcomes above.
+
+## Keeping this page honest
+
+Refresh the exported reports, tenant directory and desk notes, then rebuild the page and
+reconcile ticket membership when the desk supplies new evidence. The counts and charts
+come from components at render time; issue counts record the corresponding snapshot.
+A confirmed new failure path gets its own ticket. Preserve accepted decisions and add
+a new record when changing policy.
+
+<RenderStamp {signature} />
+

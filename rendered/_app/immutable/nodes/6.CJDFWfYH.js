@@ -1,0 +1,1 @@
+export{n as component}from"../chunks/BF-81bS4.js";

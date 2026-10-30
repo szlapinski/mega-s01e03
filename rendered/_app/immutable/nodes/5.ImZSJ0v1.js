@@ -1,0 +1,1 @@
+export{n as component}from"../chunks/BvSL4ZVF.js";

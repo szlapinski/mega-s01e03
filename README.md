@@ -37,9 +37,10 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 
 ## S01E03: review and render
 
-The new signed decision is `src/routes/kb/decisions/0002-dedupe-by-cause/+page.svx`.
-It supersedes decision 0001, which remains unchanged. Incident and triage prose now follow
-the evidence and the replacement rule.
+The course-signed page is `src/routes/kb/incidents/4471-review/+page.svx`.
+Decision 0002 supersedes decision 0001; both accepted decisions remain unchanged after
+publication. The closure review records the later engineering update and ticket outcomes.
+Incident and triage prose now follow the evidence and the replacement rule.
 
 With Node.js 22.18+:
 
@@ -50,7 +51,7 @@ npm run build
 python3 -m http.server 4173 --directory rendered --bind 127.0.0.1
 ```
 
-Open `http://127.0.0.1:4173/kb/decisions/0002-dedupe-by-cause/` to see the actual rendered
+Open `http://127.0.0.1:4173/kb/incidents/4471-review/` to see the actual rendered
 page, including computed counts, dedupe examples, queue timeline and derived desk reference.
 `rendered/` is a complete static site; its `index.html` files are the desk-facing render,
 not a Markdown transcription. Keep the generated assets beside the HTML.
